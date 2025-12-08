@@ -21,7 +21,7 @@ class DuplicataFactory:
         """Simula uma chave de acesso de NF-e válida (44 dígitos)"""
         # Formato: UF(2) + AAMM(4) + CNPJ(14) + Mod(2) + Serie(3) + Num(9) + Random(9) + DV(1)
         aamm = data_emissao.strftime("%y%m")
-        cod_uf = "35" # Simplificação
+        cod_uf = "35"  # Simplificação
         random_part = str(random.randint(10000000000000000000, 99999999999999999999))
         chave = f"{cod_uf}{aamm}{random_part}"
         return chave[:44].ljust(44, '0')
@@ -33,9 +33,9 @@ class DuplicataFactory:
         for _ in range(qtd_cedentes):
             setor = random.choice(list(SETORES.keys()))
             self.cedentes.append({
-                "id": faker.uuid4(),
-                "razao_social": faker.company(),
-                "cnpj": faker.cnpj(),
+                "id": fake.uuid4(),
+                "razao_social": fake.company(),
+                "cnpj": fake.cnpj(),
                 "estado": random.choice(ESTADOS),
                 "setor": setor,
                 "tipo": "Cedente"
@@ -44,9 +44,9 @@ class DuplicataFactory:
         for _ in range(qtd_sacados):
             setor = random.choice(list(SETORES.keys()))
             self.sacados.append({
-                "id": faker.uuid4(),
-                "razao_social": faker.company(),
-                "cnpj": faker.cnpj(),
+                "id": fake.uuid4(),
+                "razao_social": fake.company(),
+                "cnpj": fake.cnpj(),
                 "estado": random.choice(ESTADOS),
                 "setor": setor,
                 "tipo": "Sacado"
@@ -57,33 +57,29 @@ class DuplicataFactory:
         cedente = random.choice(self.cedentes)
         setor_cedente = cedente['setor']
         
-        # 1. Olha na matriz quem são os compradores válidos para esse vendedor
-        setores_compradores_validos = self.MATRIZ_SUPRIMENTOS.get(setor_cedente, [])
+        # Seleciona sacado compatível baseado na matriz de suprimentos
+        setores_compativeis = SUPRIMENTOS.get(setor_cedente, list(SETORES.keys()))
+        sacados_compativeis = [s for s in self.sacados if s['setor'] in setores_compativeis]
         
-        # 2. Filtra a lista de sacados para achar empresas desses setores
-        sacados_candidatos = [
-            s for s in self.sacados 
-            if s['setor'] in setores_compradores_validos
-        ]
-        
-        # Fallback: Se não achar ninguém específico (raro), pega qualquer um (exceção do mundo real)
-        if not sacados_candidatos:
+        # Se não houver sacados compatíveis, usa qualquer sacado
+        if not sacados_compativeis:
             sacado = random.choice(self.sacados)
         else:
-            sacado = random.choice(sacados_candidatos)
-
-        produto = random.choice(SETORES_PRODUTOS[cedente['setor']])
+            sacado = random.choice(sacados_compativeis)
         
-        # --- O RESTO DO CÓDIGO PERMANECE IGUAL ---
-        dt_emissao = faker.date_between(start_date='-6m', end_date='today')
+        dt_emissao = fake.date_between(start_date='-6m', end_date='today')
         prazo = random.choice([30, 45, 60, 90])
         dt_vencimento = dt_emissao + timedelta(days=prazo)
+        
+        # Gera produto baseado no setor do cedente
+        produtos_setor = SETORES.get(setor_cedente, ["Produto Genérico"])
+        produto = random.choice(produtos_setor)
         
         preco_base = random.uniform(1000, 10000)
         valor_nota = round(preco_base * random.uniform(0.9, 1.1), 2)
 
         return {
-            "id_duplicata": faker.uuid4(),
+            "id_duplicata": fake.uuid4(),
             "chave_nfe": self._gerar_chave_nfe(cedente['estado'], dt_emissao),
             "data_emissao": dt_emissao,
             "data_vencimento": dt_vencimento,
@@ -104,3 +100,5 @@ class DuplicataFactory:
             "label_fraude": 0,
             "tipo_fraude": "Nenhuma"
         }
+
+

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 # --- 1. DEFINIÇÃO DE PERFIS (Setores e Produtos) ---
 
 SETORES = {
@@ -55,3 +57,10 @@ SUPRIMENTOS = {
 #---4. LABEL FRAUDES
 
 LABEL_FRAUDES = ['Nenhuma','Duplicatas Falsas','Duplicatas Duplicadas','Endosso Indevido']
+
+#---5. CAMINHO DO BANCO
+
+BASE_PATH = Path(__file__).resolve().parent.parent.parent 
+
+DB_PATH = BASE_PATH / "data" / "duplicatas.duckdb"
+
