@@ -7,6 +7,7 @@ from .scripts.popular_banco_automatico import popular_banco_automatico
 from .models.populacao import ConfigPopulacao
 from .core.config import DB_PATH
 from .core.dependencies import get_db_manager
+from .routes.view import router as view
 
 Path("data").mkdir(exist_ok=True)
 
@@ -41,18 +42,4 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-@app.get("/")
-def root():
-    """Endpoint raiz com informações da API"""
-    return {
-        "message": "API de Geração e Detecção de Fraudes em Duplicatas",
-        "version": "2.0.0",
-        "endpoints": {
-            "/status": "Verifica status do banco de dados",
-            "/popular": "Popula o banco com dados sintéticos (manual)",
-            "/limpar": "Limpa todos os dados do banco",
-            "/estatisticas": "Estatísticas gerais do dataset",
-            "/fraudes": "Lista todas as fraudes detectadas",
-            "/docs": "Documentação interativa"
-        }
-    }
+app.include_router(view)
