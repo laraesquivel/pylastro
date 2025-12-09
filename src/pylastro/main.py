@@ -8,8 +8,9 @@ from .models.populacao import ConfigPopulacao
 from .core.config import DB_PATH
 from .core.dependencies import get_db_manager
 from .routes.view import router as view
+from .routes.mocks import router as mock
+from .routes.relatorios import router as relatorios
 
-Path("data").mkdir(exist_ok=True)
 
 
 @asynccontextmanager
@@ -43,3 +44,5 @@ app = FastAPI(
 )
 
 app.include_router(view)
+app.include_router(mock)
+app.include_router(relatorios)

@@ -51,7 +51,24 @@ class DuplicataFactory:
                 "setor": setor,
                 "tipo": "Sacado"
             })
-
+    def _gerar_endossatario(self):
+        """
+        Gera endossatário (ou None para a maioria das duplicatas)
+        - 10% das duplicatas têm endosso
+        - Desses 10%: 70% são bancos (legítimos), 30% são não-bancários (suspeitos)
+        """
+        
+        return random.choice( [
+            "Banco do Brasil S.A.",
+            "Itaú Unibanco S.A.",
+            "Bradesco S.A.",
+            "Santander Brasil S.A.",
+            "Caixa Econômica Federal",
+            "BTG Pactual S.A.",
+            "Safra S.A.",
+            "Banco Inter S.A."
+        ])
+          
     def gerar_transacao_normal(self):
         """Gera uma duplicata saudável baseada na Matriz de Suprimentos"""
         cedente = random.choice(self.cedentes)
@@ -78,6 +95,9 @@ class DuplicataFactory:
         preco_base = random.uniform(1000, 10000)
         valor_nota = round(preco_base * random.uniform(0.9, 1.1), 2)
 
+        endossatario = self._gerar_endossatario()
+
+
         return {
             "id_duplicata": fake.uuid4(),
             "chave_nfe": self._gerar_chave_nfe(cedente['estado'], dt_emissao),
@@ -97,6 +117,7 @@ class DuplicataFactory:
             "produto": produto,
             "valor": valor_nota,
             "aceite_sacado": True,
+            "endossatario": endossatario,
             "label_fraude": 0,
             "tipo_fraude": "Nenhuma"
         }

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 # --- 1. DEFINIÇÃO DE PERFIS (Setores e Produtos) ---
@@ -64,3 +65,4 @@ BASE_PATH = Path(__file__).resolve().parent.parent.parent
 
 DB_PATH = BASE_PATH / "data" / "duplicatas.duckdb"
 
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")

@@ -1,9 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 import duckdb
 from datetime import datetime
 from ..core.dependencies import get_db_connection
 
-router = APIRouter(prefix="/view", tags=["Analytics & Dashboard"])
+router = APIRouter(prefix="/view", tags=["Analytics & Database"])
 
 @router.get("/kpis-gerais")
 def get_kpis_gerais():
@@ -103,5 +103,23 @@ def get_fluxo_vencimento():
         df = conn.execute(query).df()
         df['data_vencimento'] = df['data_vencimento'].dt.strftime('%Y-%m-%d')
         return df.to_dict(orient="records")
+    finally:
+        conn.close()
+
+@router.get("/exemplo_fraude")
+def get_exemplo_fraude(tipo_fraude: str):
+    """
+    Retorna exemplos de duplicatas marcadas como fraude para o tipo de fraude especificado.
+    """
+    conn = get_db_connection()
+    try:
+        query = """
+            SELECT * FROM duplicatas
+            WHERE label_fraude = 1 AND tipo_fraude = ?
+        """
+        df = conn.execute(query, [tipo_fraude]).df()
+        return df.to_dict(orient="records")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     finally:
         conn.close()
