@@ -231,7 +231,6 @@ class AntiFraudeAgente:
             )
 
             
-            # Limpeza robusta para garantir que Markdown não quebre o parser
             output_text = output_text.replace("```json", "").replace("```", "").strip()
             
             return json.loads(output_text)
