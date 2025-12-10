@@ -21,7 +21,7 @@ O sistema é capaz de:
 ---
 
 # 🗂 Estrutura de Pastas
-
+```text
 src/
 │
 ├── data/
@@ -58,7 +58,7 @@ src/
 └── service/
 ├── detectar_fraude.py
 └── simular_alerta.py
-
+```
 
 ---
 
