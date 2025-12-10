@@ -25,12 +25,28 @@ class DuplicataItem(BaseModel):
     risk_score: float
     classificacao: ClassificacaoEnum
     valor: float
+
     cedente: str
     sacado: str
     motivos: List[str]
-    # label_real: int = Field(..., description="0 ou 1")
-    # tipo_fraude_real: TipoFraudeEnum
 
+    cnpj_cedente: str
+    estado_cedente: str
+    setor_cedente: str
+
+    cnpj_sacado: str
+    estado_sacado: str
+    setor_sacado: str
+
+    aceite_sacado: bool
+    endossatario: str | None = None
+
+    data_emissao: str
+    data_vencimento: str
+    prazo_dias: int
+
+    # label_fraude: int = Field(..., description="0 ou 1 indicando fraude real")
+    # tipo_fraude_real: TipoFraudeEnum
 
 # Payload POST (lista de duplicatas)
 class DuplicatasPayload(BaseModel):
