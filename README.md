@@ -229,3 +229,21 @@ O retorno inclui:
 
 ### 👥 5. Libera o time para atividades estratégicas
 Analistas focam nos casos realmente críticos.
+
+### 6 Execução
+
+Siga os passos abaixo para configurar e executar o projeto localmente. O exemplo abaixo foi feito para executar no windows, adapte conforme o necessário, capture o caminho do poetry env activate para conseguir executar o uvicorn.
+
+---
+
+
+```
+git clone <URL_DO_REPOSITORIO>
+cd <NOME_DO_PROJETO>
+poetry install
+poetry env activate
+$env:GOOGLE_API_KEY=CHAVEAPI 
+uvicorn src.pylastro.main:app --reload      
+```
+
+
