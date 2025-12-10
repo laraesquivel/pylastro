@@ -33,7 +33,6 @@ async def lifespan(app: FastAPI):
     # Aqui a API fica ativa
     yield
 
-    # Evento de encerramento (opcional)
     print("🛑 Encerrando aplicação...")
 
 app = FastAPI(
@@ -46,3 +45,10 @@ app = FastAPI(
 app.include_router(view)
 app.include_router(mock)
 app.include_router(relatorios)
+
+@app.get("/", tags=["Status"])
+def root():
+    return {
+        "status": "online",
+        "message": "API de Análise e Detecção de Fraudes ativa, acesse /docs para ver as rotas"
+    }
